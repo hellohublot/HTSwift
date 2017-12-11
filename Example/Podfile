@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'HTSwift_Example' do
+  pod 'HTSwift', :path => '../'
+
+  target 'HTSwift_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
