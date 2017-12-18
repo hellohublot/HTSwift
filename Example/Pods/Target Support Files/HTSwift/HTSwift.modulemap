@@ -1,0 +1,6 @@
+framework module HTSwift {
+  umbrella header "HTSwift-umbrella.h"
+
+  export *
+  module * { export * }
+}
