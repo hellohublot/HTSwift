@@ -64,6 +64,7 @@ extension HTSwift where Base: UIScrollView {
 	}
 	
 	func setRefreshingBlock(_ provider: RefreshProvider?, _ refreshingBlock: @escaping RefreshingBlock) {
+		refreshProvider = provider
 		let headerRefreshing: ControlBlock = {
 			self.pageIndex = 0
 			refreshingBlock(self.base, self.pageIndex + 1, self.pageCount)

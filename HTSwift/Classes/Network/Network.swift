@@ -13,7 +13,7 @@ enum Method {
 
 public typealias OutputProgress = (_ progress: Double, _ completeMegaByte: Double, _ totalMegaByte: Double) -> Void
 
-public typealias Response = (_ response: Result<Any>?) -> Void
+public typealias Response = (_ response: Result<Any>) -> Void
 
 protocol Task {
 	
@@ -66,7 +66,7 @@ public enum Result<Value> {
 }
 
 protocol ValidateProvider {
-	static func result(_ response: Any?) -> Result<Any>?
+	static func result(_ response: Any?) -> Result<Any>
 }
 
 class Network {
@@ -88,17 +88,18 @@ class Network {
 	var uploadData: Data?
 	var uploadFormArray: [URL]?
 	
-	init(url: String, method: Method = .get, parameter: [String: Any] = [:], complete: @escaping Response = {response in}) {
+	init(url: String, method: Method = .get, parameter: [String: Any] = [:], validateProvider: ValidateProvider.Type, complete: @escaping Response = {response in}) {
 		self.url = url
 		self.method = method
 		self.parameters = parameter
 		self.readResponse = complete
+		self.validateProvider = validateProvider
 	}
 	
 	var task: Task?
+	var validateProvider: ValidateProvider.Type
 	var networkProvider: NetworkProvider.Type?
 	var cacheProvider: CacheProvider.Type?
-	var validateProvider: ValidateProvider.Type?
 	
 	func request() {
 		var task: Task?
@@ -113,22 +114,17 @@ class Network {
 		self.task = task
 	}
 	
-	func cache(_ response: Result<Any>?) -> Result<Any>? {
-		var readResult = response
+	func cacheResult(_ inResult: Result<Any>) -> Result<Any> {
 		var read: Any?
-		if let result = readResult {
-			switch result {
-			case .failure:
-				read = cacheProvider?.cacheNetwork(url, parameters)
-			case .success(let value):
-				read = value
-				cacheProvider?.setCacheNetwork(url, parameters, value)
-			}
+		switch inResult {
+		case .failure:
+			read = cacheProvider?.cacheNetwork(url, parameters)
+		case .success(let value):
+			read = value
+			cacheProvider?.setCacheNetwork(url, parameters, value)
 		}
-		if let _ = read {
-			readResult = validateProvider?.result(read)
-		}
-		return readResult
+		let outResult = validateProvider.result(read)
+		return outResult
 	}
 	
 }
