@@ -104,8 +104,8 @@ extension PlaceholderAble where Self: UIView {
 		self.translatesAutoresizingMaskIntoConstraints = false
 		let width = NSLayoutConstraint(item: self, attribute: .width, relatedBy: .equal, toItem: self.superview, attribute: .width, multiplier: 1, constant: 0)
 		let height = NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: self.superview, attribute: .height, multiplier: 1, constant: 0)
-		width.priority = UILayoutPriority(rawValue: 100)
-		height.priority = UILayoutPriority(rawValue: 100)
+		width.priority = UILayoutPriority(Float(100))
+		height.priority = UILayoutPriority(Float(100))
 		NSLayoutConstraint.activate([
 			NSLayoutConstraint(item: self, attribute: .centerX, relatedBy: .equal, toItem: self.superview, attribute: .centerX, multiplier: 1, constant: 0),
 			NSLayoutConstraint(item: self, attribute: .centerY, relatedBy: .equal, toItem: self.superview, attribute: .centerY, multiplier: 1, constant: 0),
