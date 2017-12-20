@@ -1,5 +1,5 @@
 PODS:
-  - HTSwift (0.1.0)
+  - HTSwift (1.0.0)
 
 DEPENDENCIES:
   - HTSwift (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  HTSwift: 6c9dd80ed0745165b423fbf1087ac059eb0396bc
+  HTSwift: a9ec3497dc2ddbb1acd199312fdcd969ebfc2968
 
 PODFILE CHECKSUM: 0a9f782b06905b37f3aac1801d378ff8924ea89d
 

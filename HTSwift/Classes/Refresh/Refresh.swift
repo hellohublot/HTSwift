@@ -13,12 +13,12 @@ public protocol RefreshControl: class {
 		get
 	}
 	
-	func endRefreshing()
+	func endRefresh()
 	
 }
 
 public protocol RefreshFooterControl: RefreshControl {
-	func endRefreshingWithNoMoreData()
+	func endRefreshWithNoMoreData()
 }
 
 public protocol RefreshProvider: class {
@@ -116,16 +116,16 @@ extension HTSwift where Base: UIScrollView {
 				willNoMoreData = true
 			}
 		}
-		refreshProvider?.headerControl?.endRefreshing()
+		refreshProvider?.headerControl?.endRefresh()
 		resetFooterWith(noMoreData: willNoMoreData)
 		placeholderState = willState
 	}
 	
 	func resetFooterWith(noMoreData: Bool) {
 		if noMoreData {
-			refreshProvider?.footerControl?.endRefreshingWithNoMoreData()
+			refreshProvider?.footerControl?.endRefreshWithNoMoreData()
 		} else {
-			refreshProvider?.footerControl?.endRefreshing()
+			refreshProvider?.footerControl?.endRefresh()
 		}
 	}
 	
