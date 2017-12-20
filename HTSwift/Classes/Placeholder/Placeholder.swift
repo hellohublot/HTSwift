@@ -92,7 +92,7 @@ extension HTSwift where Base: UIView {
 }
 
 
-protocol PlaceholderAble {
+public protocol PlaceholderAble {
 	func moveToContentView()
 	func placeholderShow()
 	func placeholderHidden()
