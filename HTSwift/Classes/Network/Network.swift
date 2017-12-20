@@ -2,7 +2,7 @@
 
 import Foundation
 
-enum Method {
+public enum Method {
 	case get
 	case post
 	case download
@@ -15,7 +15,7 @@ public typealias OutputProgress = (_ progress: Double, _ completeMegaByte: Doubl
 
 public typealias Response = (_ response: Result<Any>) -> Void
 
-protocol Task {
+public protocol Task {
 	
 	func resume()
 	
@@ -25,13 +25,13 @@ protocol Task {
 	
 }
 
-protocol NetworkProvider {
+public protocol NetworkProvider {
 	static func request(_ model: Network) -> Task
 	static func download(_ model: Network) -> Task
 	static func upload(_ model: Network) -> Task
 }
 
-protocol CacheProvider {
+public protocol CacheProvider {
 	static func setCacheNetwork(_ url: String, _ parameter: [String: Any], _ response: Any?)
 	static func cacheNetwork(_ url: String, _ parameter: [String: Any]) -> Any?
 }
@@ -65,30 +65,30 @@ public enum Result<Value> {
 	}
 }
 
-protocol ValidateProvider {
+public protocol ValidateProvider {
 	static func result(_ response: Any?) -> Result<Any>
 }
 
-class Network {
+public class Network {
 	
-	let method: Method
-	let url: String
-	let readResponse: Response
-	let parameters: [String: Any]
+	public let method: Method
+	public let url: String
+	public let readResponse: Response
+	public let parameters: [String: Any]
 	
-	var parametersEncoding: Any?
+	public var parametersEncoding: Any?
 	
-	var headers: [String: String]?
+	public var headers: [String: String]?
 	
-	var progress: OutputProgress?
+	public var progress: OutputProgress?
 	
-	var dataResponse: Response?
-	var destination: URL?
+	public var dataResponse: Response?
+	public var destination: URL?
 	
-	var uploadData: Data?
-	var uploadFormArray: [URL]?
+	public var uploadData: Data?
+	public var uploadFormArray: [URL]?
 	
-	init(url: String, method: Method = .get, parameter: [String: Any] = [:], validateProvider: ValidateProvider.Type, complete: @escaping Response = {response in}) {
+	public init(url: String, method: Method = .get, parameter: [String: Any] = [:], validateProvider: ValidateProvider.Type, complete: @escaping Response = {response in}) {
 		self.url = url
 		self.method = method
 		self.parameters = parameter
@@ -96,12 +96,12 @@ class Network {
 		self.validateProvider = validateProvider
 	}
 	
-	var task: Task?
-	var validateProvider: ValidateProvider.Type
-	var networkProvider: NetworkProvider.Type?
-	var cacheProvider: CacheProvider.Type?
+	public var task: Task?
+	public var validateProvider: ValidateProvider.Type
+	public var networkProvider: NetworkProvider.Type?
+	public var cacheProvider: CacheProvider.Type?
 	
-	func request() {
+	public func request() {
 		var task: Task?
 		switch method {
 		case .upload:
@@ -114,7 +114,7 @@ class Network {
 		self.task = task
 	}
 	
-	func cacheResult(_ inResult: Result<Any>) -> Result<Any> {
+	public func cacheResult(_ inResult: Result<Any>) -> Result<Any> {
 		var read: Any?
 		switch inResult {
 		case .failure:
