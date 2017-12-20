@@ -4,23 +4,23 @@ import Foundation
 
 extension Decodable {
 	
-	static func decode(_ any: Any?) -> Self? {
+	public static func decode(_ any: Any?) -> Self? {
 		return decode(Extension.dataFromAny(any))
 	}
 	
-	static func decodeArray(_ any: Any?) -> [Self] {
+	public static func decodeArray(_ any: Any?) -> [Self] {
 		return decodeArray(Extension.dataFromAny(any))
 	}
 	
-	static func decode(_ string: String?) -> Self? {
+	public static func decode(_ string: String?) -> Self? {
 		return decode(Extension.dataFromString(string))
 	}
 	
-	static func decodeArray(_ string: String?) -> [Self] {
+	public static func decodeArray(_ string: String?) -> [Self] {
 		return decodeArray(Extension.dataFromString(string))
 	}
 	
-	static func decode(_ data: Data?) -> Self? {
+	public static func decode(_ data: Data?) -> Self? {
 		var object: Self?
 		do {
 			if let _ = data {
@@ -31,7 +31,7 @@ extension Decodable {
 		return object
 	}
 	
-	static func decodeArray(_ data: Data?) -> [Self] {
+	public static func decodeArray(_ data: Data?) -> [Self] {
 		var objectArray: [Self] = [Self]()
 		do {
 			if let _ = data {
@@ -44,7 +44,7 @@ extension Decodable {
 	
 }
 
-class Extension {
+public class Extension {
 	
 	static func dataFromString(_ string: String?) -> Data? {
 		return string?.data(using: .utf8)
@@ -69,12 +69,12 @@ class Extension {
 
 extension Dictionary where Key == String, Value == Any {
 	
-	func object(_ key: String) -> Any? {
+	public func object(_ key: String) -> Any? {
 		let object = self[key]
 		return object
 	}
 	
-	func dictionary(_ key: String) -> [String: Any]? {
+	public func dictionary(_ key: String) -> [String: Any]? {
 		let dictionary = self[key] as? [String: Any]
 		return dictionary
 	}

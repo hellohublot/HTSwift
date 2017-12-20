@@ -12,7 +12,7 @@ public enum PlaceholderState: Int {
 	case needAuth
 }
 
-protocol PlaceholderProvider: class {
+public protocol PlaceholderProvider: class {
 	
 	func setPlaceholderView(_ placeholderView: (UIView & PlaceholderAble), forState state: PlaceholderState)
 	
@@ -22,7 +22,7 @@ protocol PlaceholderProvider: class {
 
 extension HTSwift where Base: UIView {
 	
-	var placeholderState: PlaceholderState {
+	public var placeholderState: PlaceholderState {
 		get {
 			return valueFor(key: #function) as? PlaceholderState ?? .none
 		}
@@ -32,7 +32,7 @@ extension HTSwift where Base: UIView {
 		}
 	}
 	
-	func reloadPlaceholderState(_ state: PlaceholderState) {
+	public func reloadPlaceholderState(_ state: PlaceholderState) {
 		while placeholderContentView.subviews.count > 0 {
 			let view = placeholderContentView.subviews.last as? (UIView & PlaceholderAble)
 			view?.removeFromSuperview()
@@ -50,7 +50,7 @@ extension HTSwift where Base: UIView {
 		}
 	}
 	
-	var placeholderProvider: PlaceholderProvider? {
+	public var placeholderProvider: PlaceholderProvider? {
 		get {
 			return valueFor(key: #function) as? PlaceholderProvider
 		}
@@ -100,7 +100,7 @@ public protocol PlaceholderAble {
 
 extension PlaceholderAble where Self: UIView {
 	
-	func moveToContentView() {
+	public func moveToContentView() {
 		self.translatesAutoresizingMaskIntoConstraints = false
 		let width = NSLayoutConstraint(item: self, attribute: .width, relatedBy: .equal, toItem: self.superview, attribute: .width, multiplier: 1, constant: 0)
 		let height = NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: self.superview, attribute: .height, multiplier: 1, constant: 0)
@@ -113,10 +113,10 @@ extension PlaceholderAble where Self: UIView {
 			height
 		])
 	}
-	func placeholderShow() {
+	public func placeholderShow() {
 		self.isHidden = false
 	}
-	func placeholderHidden() {
+	public func placeholderHidden() {
 		self.isHidden = true
 	}
 }

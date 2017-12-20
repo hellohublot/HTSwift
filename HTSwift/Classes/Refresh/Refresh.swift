@@ -34,7 +34,7 @@ public protocol RefreshProvider: class {
 
 extension HTSwift where Base: UIScrollView {
 	
-	typealias RefreshingBlock = (_ scrollView: UIScrollView, _ pageIndex: Int, _ pageCount: Int) -> Void
+	public typealias RefreshingBlock = (_ scrollView: UIScrollView, _ pageIndex: Int, _ pageCount: Int) -> Void
 	
 	public var refreshProvider: RefreshProvider? {
 		get {
@@ -63,7 +63,7 @@ extension HTSwift where Base: UIScrollView {
 		}
 	}
 	
-	func setRefreshingBlock(_ provider: RefreshProvider?, _ refreshingBlock: @escaping RefreshingBlock) {
+	public func setRefreshingBlock(_ provider: RefreshProvider?, _ refreshingBlock: @escaping RefreshingBlock) {
 		refreshProvider = provider
 		let headerRefreshing: ControlBlock = {
 			self.pageIndex = 0
@@ -77,18 +77,18 @@ extension HTSwift where Base: UIScrollView {
 		refreshProvider?.footerControl?.block = footerRefreshing
 	}
 	
-	func respondHeaderRefresh() {
+	public func respondHeaderRefresh() {
 		if let headerRefreshing = refreshProvider?.headerControl?.block {
 			placeholderState = .firstRefresh
 			headerRefreshing()
 		}
 	}
 	
-	func endRefreshWith(modelCount: NSInteger) {
+	public func endRefreshWith(modelCount: NSInteger) {
 		endRefreshWith(modelCount: modelCount, onlyOnePage: false)
 	}
 	
-	func endRefreshWith(modelCount: NSInteger, onlyOnePage: Bool) {
+	public func endRefreshWith(modelCount: NSInteger, onlyOnePage: Bool) {
 		let isHeaderRefreshing = (refreshProvider?.headerControl?.refresh ?? true) || placeholderState == .firstRefresh
 		let isFooterRefreshing = (refreshProvider?.footerControl?.refresh ?? false)
 		var willNoMoreData = false

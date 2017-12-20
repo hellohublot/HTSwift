@@ -2,7 +2,7 @@
 
 import Foundation
 
-private struct AssociatedManager {
+struct AssociatedManager {
 	static var AssociatedKeyValue:[String:Any] = [:]
 	static func point(forKey key: String) -> UnsafeRawPointer {
 		let value = AssociatedKeyValue[key] ?? {
