@@ -69,24 +69,24 @@ public protocol ValidateProvider {
 	static func result(_ response: Any?) -> Result<Any>
 }
 
-public class Network {
+open class Network {
 	
-	public let method: Method
-	public let url: String
-	public let readResponse: Response
-	public let parameters: [String: Any]
+	open let method: Method
+	open let url: String
+	open let readResponse: Response
+	open let parameters: [String: Any]
 	
-	public var parametersEncoding: Any?
+	open var parametersEncoding: Any?
 	
-	public var headers: [String: String]?
+	open var headers: [String: String]?
 	
-	public var progress: OutputProgress?
+	open var progress: OutputProgress?
 	
-	public var dataResponse: Response?
-	public var destination: URL?
+	open var dataResponse: Response?
+	open var destination: URL?
 	
-	public var uploadData: Data?
-	public var uploadFormArray: [URL]?
+	open var uploadData: Data?
+	open var uploadFormArray: [URL]?
 	
 	public init(url: String, method: Method = .get, parameter: [String: Any] = [:], validateProvider: ValidateProvider.Type, complete: @escaping Response = {response in}) {
 		self.url = url
@@ -96,12 +96,12 @@ public class Network {
 		self.validateProvider = validateProvider
 	}
 	
-	public var task: Task?
-	public var validateProvider: ValidateProvider.Type
-	public var networkProvider: NetworkProvider.Type?
-	public var cacheProvider: CacheProvider.Type?
+	open var task: Task?
+	open var validateProvider: ValidateProvider.Type
+	open var networkProvider: NetworkProvider.Type?
+	open var cacheProvider: CacheProvider.Type?
 	
-	public func request() {
+	open func request() {
 		var task: Task?
 		switch method {
 		case .upload:
@@ -114,7 +114,7 @@ public class Network {
 		self.task = task
 	}
 	
-	public func cacheResult(_ inResult: Result<Any>) -> Result<Any> {
+	open func cacheResult(_ inResult: Result<Any>) -> Result<Any> {
 		var read: Any?
 		switch inResult {
 		case .failure:
