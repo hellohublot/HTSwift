@@ -32,8 +32,8 @@ public protocol ConnectProvider {
 }
 
 public protocol CacheProvider {
-	static func setCacheNetwork(_ url: String, _ parameter: [String: Any], _ response: Any?)
-	static func cacheNetwork(_ url: String, _ parameter: [String: Any]) -> Any?
+	func setCacheNetwork(_ url: String, _ parameter: [String: Any], _ response: Any?)
+	func cacheNetwork(_ url: String, _ parameter: [String: Any]) -> Any?
 }
 
 public enum Result<Value> {
@@ -66,7 +66,7 @@ public enum Result<Value> {
 }
 
 public protocol ValidateProvider {
-	static func result(_ response: Any?) -> Result<Any>
+	func result(_ response: Any?) -> Result<Any>
 }
 
 open class Network {
@@ -88,7 +88,7 @@ open class Network {
 	open var uploadData: Data?
 	open var uploadFormArray: [URL]?
 	
-	public init(url: String, method: ConnectMethod = .get, parameter: [String: Any] = [:], validateProvider: ValidateProvider.Type, complete: @escaping Response = {response in}) {
+	public init(url: String, method: ConnectMethod = .get, parameter: [String: Any] = [:], validateProvider: ValidateProvider, complete: @escaping Response = {response in}) {
 		self.url = url
 		self.method = method
 		self.parameters = parameter
@@ -97,9 +97,9 @@ open class Network {
 	}
 	
 	open var task: Task?
-	open var validateProvider: ValidateProvider.Type
+	open var validateProvider: ValidateProvider
 	open var connectProvider: ConnectProvider.Type?
-	open var cacheProvider: CacheProvider.Type?
+	open var cacheProvider: CacheProvider?
 	
 	open func request() {
 		var task: Task?
