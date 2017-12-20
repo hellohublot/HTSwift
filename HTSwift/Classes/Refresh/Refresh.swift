@@ -32,7 +32,7 @@ public protocol RefreshProvider: class {
 	
 }
 
-extension HTSwift where Base: UIScrollView {
+extension HTBox where Base: UIScrollView {
 	
 	public typealias RefreshingBlock = (_ scrollView: UIScrollView, _ pageIndex: Int, _ pageCount: Int) -> Void
 	

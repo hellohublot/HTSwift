@@ -19,7 +19,7 @@ public protocol AssociatedAble {
 	
 }
 
-public extension HTSwift where Base: AssociatedAble {
+public extension HTBox where Base: AssociatedAble {
 	
 	private func point(forKey key: String) -> UnsafeRawPointer {
 		let dictionaryKey = "\(self)" + key

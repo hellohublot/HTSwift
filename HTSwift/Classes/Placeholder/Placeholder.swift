@@ -20,7 +20,7 @@ public protocol PlaceholderProvider: class {
 	
 }
 
-extension HTSwift where Base: UIView {
+extension HTBox where Base: UIView {
 	
 	public var placeholderState: PlaceholderState {
 		get {
@@ -61,7 +61,7 @@ extension HTSwift where Base: UIView {
 	
 }
 
-extension HTSwift where Base: UIView {
+extension HTBox where Base: UIView {
 	var placeholderContentView: UIView {
 		get {
 			let contentView = valueFor(key: #function) as? UIView ?? {

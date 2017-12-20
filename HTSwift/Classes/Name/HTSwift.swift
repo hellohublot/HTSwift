@@ -2,7 +2,7 @@
 
 import Foundation
 
-public final class HTSwift<Base> {
+public final class HTBox<Base> {
 	public let base: Base
 	public init(_ base: Base) {
 		self.base = base
@@ -15,7 +15,7 @@ public protocol HTSwiftCompatible {
 }
 
 public extension HTSwiftCompatible {
-	public var h: HTSwift<Self> {
-		get { return HTSwift(self) }
+	public var h: HTBox<Self> {
+		get { return HTBox(self) }
 	}
 }
