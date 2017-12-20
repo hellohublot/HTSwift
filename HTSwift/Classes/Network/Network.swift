@@ -26,9 +26,9 @@ public protocol Task {
 }
 
 public protocol ConnectProvider {
-	static func request(_ model: Network) -> Task
-	static func download(_ model: Network) -> Task
-	static func upload(_ model: Network) -> Task
+	static func request(_ model: Network) -> Task?
+	static func download(_ model: Network) -> Task?
+	static func upload(_ model: Network) -> Task?
 }
 
 public protocol CacheProvider {
