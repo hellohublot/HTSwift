@@ -11,9 +11,9 @@ public enum ConnectMethod {
 	case patch
 }
 
-public typealias OutputProgress = (_ progress: Double, _ completeMegaByte: Double, _ totalMegaByte: Double) -> Void
+public typealias OutputProgressHandler = (_ progress: Double, _ completeMegaByte: Double, _ totalMegaByte: Double) -> Void
 
-public typealias Response = (_ response: Result<Any>) -> Void
+public typealias ResponseHandler = (_ response: Result<Any>) -> Void
 
 public protocol Task {
 	
@@ -73,22 +73,22 @@ open class Network {
 	
 	open let method: ConnectMethod
 	open let url: String
-	open let readResponse: Response
+	open let readResponse: ResponseHandler
 	open let parameters: [String: Any]
 	
 	open var parametersEncoding: Any?
 	
 	open var headers: [String: String]?
 	
-	open var progress: OutputProgress?
+	open var progress: OutputProgressHandler?
 	
-	open var dataResponse: Response?
+	open var dataResponse: ResponseHandler?
 	open var destination: URL?
 	
 	open var uploadData: Data?
 	open var uploadFormArray: [URL]?
 	
-	public init(url: String, method: ConnectMethod = .get, parameter: [String: Any] = [:], validateProvider: ValidateProvider, complete: @escaping Response = {response in}) {
+	public init(url: String, method: ConnectMethod = .get, parameter: [String: Any] = [:], validateProvider: ValidateProvider, complete: @escaping ResponseHandler = {response in}) {
 		self.url = url
 		self.method = method
 		self.parameters = parameter

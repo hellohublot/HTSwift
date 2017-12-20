@@ -2,11 +2,11 @@
 
 import UIKit
 
-public typealias ControlBlock = () -> Void
+public typealias ControlHandler = () -> Void
 
 public protocol RefreshControl: class {
 	
-	var block: ControlBlock? {
+	var block: ControlHandler? {
 		get set
 	}
 	var refresh: Bool? {
@@ -34,7 +34,7 @@ public protocol RefreshProvider: class {
 
 extension HTBox where Base: UIScrollView {
 	
-	public typealias RefreshingBlock = (_ scrollView: UIScrollView, _ pageIndex: Int, _ pageCount: Int) -> Void
+	public typealias RefreshingHandler = (_ scrollView: UIScrollView, _ pageIndex: Int, _ pageCount: Int) -> Void
 	
 	public var refreshProvider: RefreshProvider? {
 		get {
@@ -63,14 +63,14 @@ extension HTBox where Base: UIScrollView {
 		}
 	}
 	
-	public func setRefreshingBlock(_ provider: RefreshProvider?, _ refreshingBlock: @escaping RefreshingBlock) {
+	public func setRefreshingBlock(_ provider: RefreshProvider?, _ refreshingBlock: @escaping RefreshingHandler) {
 		refreshProvider = provider
-		let headerRefreshing: ControlBlock = {
+		let headerRefreshing: ControlHandler = {
 			self.pageIndex = 0
 			refreshingBlock(self.base, self.pageIndex + 1, self.pageCount)
 		}
 		refreshProvider?.headerControl?.block = headerRefreshing
-		let footerRefreshing: ControlBlock = {
+		let footerRefreshing: ControlHandler = {
 			self.pageIndex = max(1, self.pageIndex)
 			refreshingBlock(self.base, self.pageIndex + 1, self.pageCount)
 		}
