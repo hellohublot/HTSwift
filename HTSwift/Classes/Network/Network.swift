@@ -39,7 +39,7 @@ public protocol CacheProvider {
 public enum Result<Value> {
 	case success(Value)
 	case failure(Error)
-	var isSuccess: Bool {
+	public var isSuccess: Bool {
 		switch self {
 		case .success:
 			return true
@@ -47,7 +47,7 @@ public enum Result<Value> {
 			return false
 		}
 	}
-	var value: Value? {
+	public var value: Value? {
 		switch self {
 		case .success(let value):
 			return value
@@ -55,7 +55,7 @@ public enum Result<Value> {
 			return nil
 		}
 	}
-	var error: Error? {
+	public var error: Error? {
 		switch self {
 		case .success:
 			return nil
