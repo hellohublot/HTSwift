@@ -46,11 +46,11 @@ extension Decodable {
 
 public class Extension {
 	
-	static func dataFromString(_ string: String?) -> Data? {
+	public static func dataFromString(_ string: String?) -> Data? {
 		return string?.data(using: .utf8)
 	}
 	
-	static func dataFromAny(_ any: Any?) -> Data? {
+	public static func dataFromAny(_ any: Any?) -> Data? {
 		var data: Data?
 		do {
 			if let _ = any {
@@ -61,7 +61,7 @@ public class Extension {
 		return data
 	}
 	
-	static func dictionary(_ any: Any) -> [String: Any]? {
+	public static func dictionary(_ any: Any) -> [String: Any]? {
 		return any as? [String: Any]
 	}
 	
