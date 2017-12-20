@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum Method {
+public enum ConnectMethod {
 	case get
 	case post
 	case download
@@ -25,7 +25,7 @@ public protocol Task {
 	
 }
 
-public protocol NetworkProvider {
+public protocol ConnectProvider {
 	static func request(_ model: Network) -> Task
 	static func download(_ model: Network) -> Task
 	static func upload(_ model: Network) -> Task
@@ -71,7 +71,7 @@ public protocol ValidateProvider {
 
 open class Network {
 	
-	open let method: Method
+	open let method: ConnectMethod
 	open let url: String
 	open let readResponse: Response
 	open let parameters: [String: Any]
@@ -88,7 +88,7 @@ open class Network {
 	open var uploadData: Data?
 	open var uploadFormArray: [URL]?
 	
-	public init(url: String, method: Method = .get, parameter: [String: Any] = [:], validateProvider: ValidateProvider.Type, complete: @escaping Response = {response in}) {
+	public init(url: String, method: ConnectMethod = .get, parameter: [String: Any] = [:], validateProvider: ValidateProvider.Type, complete: @escaping Response = {response in}) {
 		self.url = url
 		self.method = method
 		self.parameters = parameter
@@ -98,18 +98,18 @@ open class Network {
 	
 	open var task: Task?
 	open var validateProvider: ValidateProvider.Type
-	open var networkProvider: NetworkProvider.Type?
+	open var connectProvider: ConnectProvider.Type?
 	open var cacheProvider: CacheProvider.Type?
 	
 	open func request() {
 		var task: Task?
 		switch method {
 		case .upload:
-			task = networkProvider?.upload(self)
+			task = connectProvider?.upload(self)
 		case .download:
-			task = networkProvider?.download(self)
+			task = connectProvider?.download(self)
 		default:
-			task = networkProvider?.request(self)
+			task = connectProvider?.request(self)
 		}
 		self.task = task
 	}
