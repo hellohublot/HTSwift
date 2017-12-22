@@ -52,11 +52,8 @@ public class Extension {
 	
 	public static func dataFromAny(_ any: Any?) -> Data? {
 		var data: Data?
-		do {
-			if let _ = any {
-				data = try JSONSerialization.data(withJSONObject: any!)
-			}
-		} catch {
+		if let any = any, JSONSerialization.isValidJSONObject(any) {
+			data = try? JSONSerialization.data(withJSONObject: any)
 		}
 		return data
 	}

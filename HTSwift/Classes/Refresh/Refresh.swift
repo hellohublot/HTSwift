@@ -30,6 +30,8 @@ public protocol RefreshProvider: class {
 		get
 	}
 	
+	func reloadRefreshScrollView(_ scrollView: UIScrollView)
+	
 }
 
 extension HTBox where Base: UIScrollView {
@@ -65,6 +67,7 @@ extension HTBox where Base: UIScrollView {
 	
 	public func setRefreshingBlock(_ provider: RefreshProvider?, _ refreshingBlock: @escaping RefreshingHandler) {
 		refreshProvider = provider
+		refreshProvider?.reloadRefreshScrollView(base)
 		let headerRefreshing: ControlHandler = {
 			self.pageIndex = 0
 			refreshingBlock(self.base, self.pageIndex + 1, self.pageCount)
