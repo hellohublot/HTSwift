@@ -38,7 +38,7 @@ extension HTBox where Base: UIScrollView {
 	
 	public typealias RefreshingHandler = (_ scrollView: UIScrollView, _ pageIndex: Int, _ pageCount: Int) -> Void
 	
-	public var refreshProvider: RefreshProvider? {
+	public weak var refreshProvider: RefreshProvider? {
 		get {
 			return valueFor(key: #function) as? RefreshProvider
 		}

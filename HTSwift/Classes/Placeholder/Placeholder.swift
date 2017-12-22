@@ -50,7 +50,7 @@ extension HTBox where Base: UIView {
 		}
 	}
 	
-	public var placeholderProvider: PlaceholderProvider? {
+	public weak var placeholderProvider: PlaceholderProvider? {
 		get {
 			return valueFor(key: #function) as? PlaceholderProvider
 		}

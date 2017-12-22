@@ -47,14 +47,12 @@ public protocol ReuseAbleView {
 	func setProxy(proxy: ThroughType?)
 }
 
-private var reuseAbleViewProxyKey: Int = 0
 public extension ReuseAbleView {
 	var proxy: ThroughType? {
 		get {
-			return objc_getAssociatedObject(self, &reuseAbleViewProxyKey) as? ThroughType
+			return nil
 		}
 		set {
-			objc_setAssociatedObject(self, &reuseAbleViewProxyKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
 			setProxy(proxy: newValue)
 			let proxy = newValue as? ReuseThrough
 			let sectionCount = proxy?.reuseViewNumberOfSections(in: self) ?? 0
@@ -116,6 +114,7 @@ public extension ReuseThrough {
 			sectionModelArray = [ReuseSectionModel(newValue)]
 		}
 	}
+	
 	public var sectionModelArray: [ReuseSectionArray] {
 		get {
 			return objc_getAssociatedObject(self, &reuseThroughSectionKey) as? [ReuseSectionArray] ?? []
