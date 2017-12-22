@@ -15,7 +15,7 @@ public typealias OutputProgressHandler = (_ progress: Double, _ completeMegaByte
 
 public typealias ResponseHandler = (_ response: Result<Any>) -> Void
 
-public protocol Task {
+public protocol Task: class {
 	
 	func resume()
 	
@@ -96,7 +96,7 @@ open class Network {
 		self.validateProvider = validateProvider
 	}
 	
-	open var task: Task?
+	open weak var task: Task?
 	open var validateProvider: ValidateProvider
 	open var connectProvider: ConnectProvider.Type?
 	open var cacheProvider: CacheProvider?

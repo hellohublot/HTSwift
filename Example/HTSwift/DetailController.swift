@@ -11,10 +11,6 @@ import HTSwift
 
 class DetailController: UIViewController {
 	
-	deinit {
-		print("11111")
-	}
-	
 	lazy var tableView: UITableView = {
 		var tableView = UITableView(frame: view.bounds)
 		tableView.register(HTCell.self, forCellReuseIdentifier: "1")

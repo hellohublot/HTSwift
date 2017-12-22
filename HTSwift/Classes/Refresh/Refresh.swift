@@ -36,9 +36,9 @@ public protocol RefreshProvider: class {
 
 extension HTBox where Base: UIScrollView {
 	
-	public typealias RefreshingHandler = (_ scrollView: UIScrollView, _ pageIndex: Int, _ pageCount: Int) -> Void
+	public typealias RefreshingHandler = (_ pageIndex: Int, _ pageCount: Int) -> Void
 	
-	public weak var refreshProvider: RefreshProvider? {
+	public var refreshProvider: RefreshProvider? {
 		get {
 			return valueFor(key: #function) as? RefreshProvider
 		}
@@ -68,14 +68,14 @@ extension HTBox where Base: UIScrollView {
 	public func setRefreshingBlock(_ provider: RefreshProvider?, _ refreshingBlock: @escaping RefreshingHandler) {
 		refreshProvider = provider
 		refreshProvider?.reloadRefreshScrollView(base)
-		let headerRefreshing: ControlHandler = {
-			self.pageIndex = 0
-			refreshingBlock(self.base, self.pageIndex + 1, self.pageCount)
+		let headerRefreshing: ControlHandler = {[unowned base] in
+			base.h.pageIndex = 0
+			refreshingBlock(base.h.pageIndex + 1, base.h.pageCount)
 		}
 		refreshProvider?.headerControl?.block = headerRefreshing
-		let footerRefreshing: ControlHandler = {
-			self.pageIndex = max(1, self.pageIndex)
-			refreshingBlock(self.base, self.pageIndex + 1, self.pageCount)
+		let footerRefreshing: ControlHandler = {[unowned base] in
+			base.h.pageIndex = max(1, base.h.pageIndex)
+			refreshingBlock(base.h.pageIndex + 1, base.h.pageCount)
 		}
 		refreshProvider?.footerControl?.block = footerRefreshing
 	}
