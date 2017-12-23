@@ -14,6 +14,12 @@ public enum PlaceholderState: Int {
 
 public protocol PlaceholderProvider: class {
 	
+	typealias ReloadNetworkHandler = () -> Void
+	
+	var reloadNetworkHandler: ReloadNetworkHandler? {
+		get set
+	}
+	
 	func setPlaceholderView(_ placeholderView: (UIView & PlaceholderAble), forState state: PlaceholderState)
 	
 	func placeholderViewFromState(_ state: PlaceholderState) -> (UIView & PlaceholderAble)?

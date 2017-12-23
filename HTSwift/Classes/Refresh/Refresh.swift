@@ -72,6 +72,9 @@ extension HTBox where Base: UIScrollView {
 			base.h.pageIndex = 0
 			refreshingBlock(base.h.pageIndex + 1, base.h.pageCount)
 		}
+		placeholderProvider?.reloadNetworkHandler = {[unowned base] in
+			base.h.respondHeaderRefresh()
+		}
 		refreshProvider?.headerControl?.block = headerRefreshing
 		let footerRefreshing: ControlHandler = {[unowned base] in
 			base.h.pageIndex = max(1, base.h.pageIndex)

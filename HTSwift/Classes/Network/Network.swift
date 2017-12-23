@@ -31,7 +31,7 @@ public protocol ConnectProvider {
 	static func upload(_ model: Network) -> Task?
 }
 
-public protocol CacheProvider {
+public protocol CacheProvider: class {
 	func setCacheNetwork(_ url: String, _ parameter: [String: Any], _ response: Any?)
 	func cacheNetwork(_ url: String, _ parameter: [String: Any]) -> Any?
 }
@@ -65,7 +65,7 @@ public enum Result<Value> {
 	}
 }
 
-public protocol ValidateProvider {
+public protocol ValidateProvider: class {
 	func result(_ response: Any?) -> Result<Any>
 }
 
