@@ -37,7 +37,7 @@ public extension HTBox where Base: UIImage {
 		var zoomSize = base.size
 		zoomSize.width *= zoom
 		zoomSize.height *= zoom
-		return imageFrom(size: zoomSize)
+		return imageWith(size: zoomSize)
 	}
 	
 }
