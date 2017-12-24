@@ -13,7 +13,7 @@ public protocol ReuseSectionArray {
 }
 
 public protocol ReuseCell {
-	func setModel(_ model: Any?, for IndexPath: IndexPath)
+	func setModel(_ model: Any?, for indexPath: IndexPath)
 }
 
 public extension ReuseCell {

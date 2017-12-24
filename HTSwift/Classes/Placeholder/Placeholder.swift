@@ -2,8 +2,6 @@
 
 import Foundation
 
-extension UIView: HTSwiftCompatible, AssociatedAble {}
-
 public enum PlaceholderState: Int {
 	case none
 	case firstRefresh
