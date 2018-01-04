@@ -10,7 +10,7 @@ import Foundation
 public extension UIImage {
 	
 	convenience init(_ color: UIColor) {
-		let size = CGSize.zero
+		let size = CGSize(width: 1, height: 1)
 		UIGraphicsBeginImageContextWithOptions(size, false, 0)
 		color.set()
 		UIRectFill(CGRect(origin: CGPoint.zero, size: size))
