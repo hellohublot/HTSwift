@@ -43,6 +43,7 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: CollectionViewThrough, UICollectionViewDelegateFlowLayout {
+	
 	func cellClass<T>(_ reuseView: T, for indexPath: IndexPath) -> ReuseCell.Type where T : ReuseAbleView {
 		return HTItem.self
 	}
@@ -50,11 +51,11 @@ extension ViewController: CollectionViewThrough, UICollectionViewDelegateFlowLay
 	func numberOfSections(in collectionView: UICollectionView) -> Int {
 		return reuseViewNumberOfSections(in: collectionView)
 	}
-
+	
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		return reuseView(collectionView, numberOfRowsInSection: section)
 	}
-
+	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		return reuseView(collectionView, cellForRowAt: indexPath) as! UICollectionViewCell
 	}

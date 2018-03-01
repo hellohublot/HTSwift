@@ -44,10 +44,13 @@ extension DetailController: TableViewThrough {
 	func numberOfSections(in tableView: UITableView) -> Int {
 		return reuseViewNumberOfSections(in: tableView)
 	}
+	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return reuseView(tableView, numberOfRowsInSection: section)
 	}
+	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		return reuseView(tableView, cellForRowAt: indexPath) as! UITableViewCell
 	}
+	
 }

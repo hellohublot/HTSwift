@@ -60,6 +60,9 @@ extension HTBox where Base: UIView {
 		}
 		set {
 			setValue(value: newValue, forKey: #function)
+			if let tableView = self.base as? UITableView, tableView.tableFooterView == nil {
+				tableView.tableFooterView = UIView()
+			}
 		}
 	}
 	
