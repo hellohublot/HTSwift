@@ -7,12 +7,10 @@
 
 import Foundation
 
-extension UIView: HTSwiftCompatible, AssociatedAble {}
-
-public extension HTBox where Base: UIView {
+public extension UIView {
 	
 	var controller: UIViewController? {
-		var responder: UIResponder? = base
+		var responder: UIResponder? = self
 		while responder is UIViewController == false {
 			responder = responder?.next
 		}

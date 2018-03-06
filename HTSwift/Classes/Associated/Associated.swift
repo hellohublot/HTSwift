@@ -15,26 +15,22 @@ struct AssociatedManager {
 	}
 }
 
-public protocol AssociatedAble {
-	
-}
-
-public extension HTBox where Base: AssociatedAble {
+public extension NSObject {
 	
 	private func point(forKey key: String) -> UnsafeRawPointer {
-		let dictionaryKey = "\(self)" + key
+		let dictionaryKey = "\(self.hashValue)" + key
 		let dictionaryValue = AssociatedManager.point(forKey: dictionaryKey)
 		return dictionaryValue
 	}
 	
-	func setValue(value: Any?, forKey key: String) {
+	func setAssociatedValue(value: Any?, forKey key: String) {
 		let point = self.point(forKey: key)
-		objc_setAssociatedObject(base, point, value, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+		objc_setAssociatedObject(self, point, value, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
 	}
 	
-	func valueFor(key: String) -> Any? {
+	func associatedValueFor(key: String) -> Any? {
 		let point = self.point(forKey: key)
-		return objc_getAssociatedObject(base, point)
+		return objc_getAssociatedObject(self, point)
 	}
 	
 }

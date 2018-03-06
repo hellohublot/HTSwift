@@ -7,23 +7,10 @@
 
 import Foundation
 
-public class StringProxy {
-	public let base: String
-	public init(_ base: String) {
-		self.base = base
-	}
-}
-
-extension String: HTSwiftCompatible {
-	public var h: StringProxy {
-		return StringProxy(self)
-	}
-}
-
-public extension StringProxy {
+public extension String {
 	
 	var origin: NSString {
-		return base as NSString
+		return self as NSString
 	}
 	
 	func height(_ font: UIFont, _ width: CGFloat) -> CGFloat {

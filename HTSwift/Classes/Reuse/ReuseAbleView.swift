@@ -67,6 +67,9 @@ public extension ReuseAbleView {
 extension UITableView: ReuseAbleView {
 	public typealias ThroughType = TableViewThrough
 	public func setProxy(proxy: ThroughType?) {
+		if tableFooterView == nil {
+			tableFooterView = UIView()
+		}
 		self.delegate = proxy
 		self.dataSource = proxy
 	}

@@ -34,51 +34,51 @@ public protocol RefreshProvider: class {
 	
 }
 
-extension HTBox where Base: UIScrollView {
+extension UIScrollView {
 	
 	public typealias RefreshingHandler = (_ pageIndex: Int, _ pageCount: Int) -> Void
 	
 	public var refreshProvider: RefreshProvider? {
 		get {
-			return valueFor(key: #function) as? RefreshProvider
+			return associatedValueFor(key: #function) as? RefreshProvider
 		}
 		set {
-			setValue(value: newValue, forKey: #function)
+			setAssociatedValue(value: newValue, forKey: #function)
 		}
 	}
 	
 	public var pageIndex: NSInteger {
 		get {
-			return valueFor(key: #function) as? NSInteger ?? 0
+			return associatedValueFor(key: #function) as? NSInteger ?? 0
 		}
 		set {
-			setValue(value: newValue, forKey: #function)
+			setAssociatedValue(value: newValue, forKey: #function)
 		}
 	}
 	
 	public var pageCount: NSInteger {
 		get {
-			return valueFor(key: #function) as? NSInteger ?? 10
+			return associatedValueFor(key: #function) as? NSInteger ?? 10
 		}
 		set {
-			setValue(value: newValue, forKey: #function)
+			setAssociatedValue(value: newValue, forKey: #function)
 		}
 	}
 	
 	public func setRefreshingBlock(_ provider: RefreshProvider?, _ refreshingBlock: @escaping RefreshingHandler) {
 		refreshProvider = provider
-		refreshProvider?.reloadRefreshScrollView(base)
-		let headerRefreshing: ControlHandler = {[unowned base] in
-			base.h.pageIndex = 0
-			refreshingBlock(base.h.pageIndex + 1, base.h.pageCount)
+		refreshProvider?.reloadRefreshScrollView(self)
+		let headerRefreshing: ControlHandler = {[unowned self] in
+			self.pageIndex = 0
+			refreshingBlock(self.pageIndex + 1, self.pageCount)
 		}
-		placeholderProvider?.reloadNetworkHandler = {[unowned base] in
-			base.h.respondHeaderRefresh()
+		placeholderProvider?.reloadNetworkHandler = {[unowned self] in
+			self.respondHeaderRefresh()
 		}
 		refreshProvider?.headerControl?.block = headerRefreshing
-		let footerRefreshing: ControlHandler = {[unowned base] in
-			base.h.pageIndex = max(1, base.h.pageIndex)
-			refreshingBlock(base.h.pageIndex + 1, base.h.pageCount)
+		let footerRefreshing: ControlHandler = {[unowned self] in
+			self.pageIndex = max(1, self.pageIndex)
+			refreshingBlock(self.pageIndex + 1, self.pageCount)
 		}
 		refreshProvider?.footerControl?.block = footerRefreshing
 	}

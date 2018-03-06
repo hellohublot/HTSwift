@@ -24,14 +24,14 @@ public protocol PlaceholderProvider: class {
 	
 }
 
-extension HTBox where Base: UIView {
+extension UIView {
 	
 	public var placeholderState: PlaceholderState {
 		get {
-			return valueFor(key: #function) as? PlaceholderState ?? .none
+			return associatedValueFor(key: #function) as? PlaceholderState ?? .none
 		}
 		set {
-			setValue(value: newValue, forKey: #function)
+			setAssociatedValue(value: newValue, forKey: #function)
 			reloadPlaceholderState(newValue)
 		}
 	}
@@ -44,7 +44,7 @@ extension HTBox where Base: UIView {
 		}
 		let placeholderView = placeholderProvider?.placeholderViewFromState(state)
 		if state != .none, let _ = placeholderView {
-			base.bringSubview(toFront: placeholderContentView)
+			bringSubview(toFront: placeholderContentView)
 			placeholderContentView.addSubview(placeholderView!)
 			placeholderContentView.isHidden = false
 			placeholderView?.moveToContentView()
@@ -56,41 +56,38 @@ extension HTBox where Base: UIView {
 	
 	public weak var placeholderProvider: PlaceholderProvider? {
 		get {
-			return valueFor(key: #function) as? PlaceholderProvider
+			return associatedValueFor(key: #function) as? PlaceholderProvider
 		}
 		set {
-			setValue(value: newValue, forKey: #function)
-			if let tableView = self.base as? UITableView, tableView.tableFooterView == nil {
-				tableView.tableFooterView = UIView()
-			}
+			setAssociatedValue(value: newValue, forKey: #function)
 		}
 	}
 	
 }
 
-extension HTBox where Base: UIView {
+extension UIView {
+	
 	var placeholderContentView: UIView {
 		get {
-			let contentView = valueFor(key: #function) as? UIView ?? {
+			let contentView = associatedValueFor(key: #function) as? UIView ?? {
 				let temp = UIView()
 				temp.translatesAutoresizingMaskIntoConstraints = false
 				temp.isHidden = true
-				base.addSubview(temp)
+				addSubview(temp)
 				var leftEdge: CGFloat = 0
 				var topEdge: CGFloat = 0
-				if base is UIScrollView {
-					let scrollView = base as! UIScrollView
+				if let scrollView = self as? UIScrollView {
 					let contentInset = scrollView.contentInset
 					leftEdge = contentInset.left - contentInset.right
 					topEdge = contentInset.top - contentInset.bottom
 				}
 				NSLayoutConstraint.activate([
-					NSLayoutConstraint(item: temp, attribute: .centerX, relatedBy: .equal, toItem: base, attribute: .centerX, multiplier: 1, constant: leftEdge),
-					NSLayoutConstraint(item: temp, attribute: .centerY, relatedBy: .equal, toItem: base, attribute: .centerY, multiplier: 1, constant: topEdge),
-					NSLayoutConstraint(item: temp, attribute: .height, relatedBy: .equal, toItem: base, attribute: .height, multiplier: 1, constant: 0),
-					NSLayoutConstraint(item: temp, attribute: .width, relatedBy: .equal, toItem: base, attribute: .width, multiplier: 1, constant: 0)
+					NSLayoutConstraint(item: temp, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: leftEdge),
+					NSLayoutConstraint(item: temp, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: topEdge),
+					NSLayoutConstraint(item: temp, attribute: .height, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 1, constant: 0),
+					NSLayoutConstraint(item: temp, attribute: .width, relatedBy: .equal, toItem: self, attribute: .width, multiplier: 1, constant: 0)
 				])
-				setValue(value: temp, forKey: #function)
+				setAssociatedValue(value: temp, forKey: #function)
 				return temp
 			}()
 			return contentView

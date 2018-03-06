@@ -21,20 +21,18 @@ public extension UIImage {
 	
 }
 
-extension UIImage: HTSwiftCompatible {}
-
-public extension HTBox where Base: UIImage {
+public extension UIImage {
 	
 	func imageWith(size: CGSize) -> UIImage {
 		UIGraphicsBeginImageContextWithOptions(size, false, 0)
-		base.draw(in: CGRect(origin: CGPoint.zero, size: size))
+		draw(in: CGRect(origin: CGPoint.zero, size: size))
 		let image = UIGraphicsGetImageFromCurrentImageContext()
 		UIGraphicsEndImageContext()
-		return image ?? base
+		return image ?? self
 	}
 	
 	func imageWith(zoom: CGFloat) -> UIImage {
-		var zoomSize = base.size
+		var zoomSize = size
 		zoomSize.width *= zoom
 		zoomSize.height *= zoom
 		return imageWith(size: zoomSize)
