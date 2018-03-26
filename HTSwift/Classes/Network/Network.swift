@@ -32,12 +32,12 @@ public protocol ConnectProvider {
 }
 
 public protocol CacheProvider: class {
-	func setCacheNetwork(_ url: String, _ parameter: [String: Any], _ response: Any?)
-	func cacheNetwork(_ url: String, _ parameter: [String: Any]) -> Any?
+	func setCacheNetwork(_ url: String, _ parameter: [String: Any], _ response: Data?)
+	func cacheNetwork(_ url: String, _ parameter: [String: Any]) -> Data
 }
 
 public enum Result<Value> {
-	case success(Value)
+	case success(_: Data, _: Value)
 	case failure(Error)
 	public var isSuccess: Bool {
 		switch self {
@@ -49,7 +49,7 @@ public enum Result<Value> {
 	}
 	public var value: Value? {
 		switch self {
-		case .success(let value):
+		case .success(let (_, value)):
 			return value
 		case .failure:
 			return nil
@@ -62,6 +62,17 @@ public enum Result<Value> {
 		case .failure(let error):
 			return error
 		}
+	}
+	public static func data(_ value: Any?) -> Data {
+		if let data = value as? Data {
+			return data
+		} else {
+			if let value = value, JSONSerialization.isValidJSONObject(value) {
+				let data = try? JSONSerialization.data(withJSONObject: value)
+				return data ?? Data()
+			}
+		}
+		return Data()
 	}
 }
 
@@ -119,9 +130,9 @@ open class Network {
 		switch inResult {
 		case .failure:
 			read = cacheProvider?.cacheNetwork(url, parameters)
-		case .success(let value):
+		case .success(let (data, value)):
 			read = value
-			cacheProvider?.setCacheNetwork(url, parameters, value)
+			cacheProvider?.setCacheNetwork(url, parameters, data)
 		}
 		let outResult = validateProvider.result(read)
 		return outResult

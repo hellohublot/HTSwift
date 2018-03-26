@@ -10,7 +10,7 @@ import Foundation
 public extension UIColor {
 	
 	convenience init(_ array: [Int]) {
-		guard array.count >= 3 else {
+		guard array.count > 3 else {
 			self.init(white: 1, alpha: 0)
 			return
 		}

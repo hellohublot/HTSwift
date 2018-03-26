@@ -18,7 +18,10 @@ extension Timer {
 			if let timer = cftimer as Timer? {
 				if let strongmaster = weakMaster {
 					block(strongmaster, timer)
-				} else if yesOrNo == false {
+				} else {
+					timer.invalidate()
+				}
+				if yesOrNo == false {
 					timer.invalidate()
 				}
 			}
