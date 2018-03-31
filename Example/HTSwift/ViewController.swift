@@ -32,7 +32,7 @@ class ViewController: UIViewController {
 	}
 	
 	func initDataSource () {
-		sectionModelArray = [ReuseSectionModel(["1", "2", "3", "4"]), ReuseSectionModel(["1", "2", "3", "4"]), ReuseSectionModel(["1", "2", "3", "4"])]
+		collectionView.sectionModelArray = [ReuseSectionModel(["1", "2", "3", "4"]), ReuseSectionModel(["1", "2", "3", "4"]), ReuseSectionModel(["1", "2", "3", "4"])]
 		collectionView.reloadData()
 	}
 	
@@ -71,7 +71,7 @@ extension ViewController: CollectionViewThrough, UICollectionViewDelegateFlowLay
 	func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
 		let identifier = HTHeader.identifier
 		let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: identifier, for: indexPath)
-		let sectionModel = sectionModelArray[indexPath.section]
+		let sectionModel = collectionView.sectionModelArray[indexPath.section]
 		(cell as! ReuseCell).setModel(sectionModel, for: indexPath)
 		return cell
 	}

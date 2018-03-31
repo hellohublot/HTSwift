@@ -30,8 +30,6 @@ public protocol RefreshProvider: class {
 		get
 	}
 	
-	func reloadRefreshScrollView(_ scrollView: UIScrollView)
-	
 }
 
 extension UIScrollView {
@@ -67,18 +65,14 @@ extension UIScrollView {
 	
 	public func setRefreshingBlock(_ provider: RefreshProvider?, _ refreshingBlock: @escaping RefreshingHandler) {
 		refreshProvider = provider
-		refreshProvider?.reloadRefreshScrollView(self)
-		let headerRefreshing: ControlHandler = {[unowned self] in
-			self.pageIndex = 0
-			refreshingBlock(self.pageIndex + 1, self.pageCount)
-		}
-		placeholderProvider?.reloadNetworkHandler = {[unowned self] in
-			self.respondHeaderRefresh()
+		let headerRefreshing: ControlHandler = {[weak self] in
+			self?.pageIndex = 0
+			refreshingBlock(self?.pageIndex ?? 0 + 1, self?.pageCount ?? 10)
 		}
 		refreshProvider?.headerControl?.block = headerRefreshing
-		let footerRefreshing: ControlHandler = {[unowned self] in
-			self.pageIndex = max(1, self.pageIndex)
-			refreshingBlock(self.pageIndex + 1, self.pageCount)
+		let footerRefreshing: ControlHandler = {[weak self] in
+			self?.pageIndex = max(1, self?.pageIndex ?? 0)
+			refreshingBlock(self?.pageIndex ?? 0 + 1, self?.pageCount ?? 10)
 		}
 		refreshProvider?.footerControl?.block = footerRefreshing
 	}
@@ -101,7 +95,7 @@ extension UIScrollView {
 		var willState = placeholderState
 		if modelCount < 0 {
 			if isHeaderRefreshing {
-				willState = PlaceholderState(rawValue: modelCount)!
+				willState = PlaceholderState(rawValue: modelCount) ?? .errorNetwork
 				willNoMoreData = true
 			}
 		} else if (modelCount == 0) {

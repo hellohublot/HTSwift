@@ -2,140 +2,110 @@
 
 import Foundation
 
-public enum ConnectMethod {
-	case get
-	case post
-	case download
-	case upload
-	case put
-	case patch
+public typealias ProgressHandler = (_ progress: Double, _ completeMegaByte: Double, _ totalMegaByte: Double) -> Void
+
+public typealias ResponseHandler = (_ response: Result) -> Void
+
+
+public enum Result {
+	case success(_: Data)
+	case failure(_: Error?)
+	public static let unknow = Result.failure(nil)
 }
 
-public typealias OutputProgressHandler = (_ progress: Double, _ completeMegaByte: Double, _ totalMegaByte: Double) -> Void
-
-public typealias ResponseHandler = (_ response: Result<Any>) -> Void
-
-public protocol Task: class {
-	
-	func resume()
-	
-	func suspend()
-	
-	func cancel()
-	
+public protocol TaskProvider {
+	weak var task: URLSessionTask? { get set }
+	weak var session: URLSession? { get set }
+	func createTask(_ request: URLRequest, _ progress: ProgressHandler?, _ response: @escaping ResponseHandler)
 }
 
-public protocol ConnectProvider {
-	static func request(_ model: Network) -> Task?
-	static func download(_ model: Network) -> Task?
-	static func upload(_ model: Network) -> Task?
+public extension TaskProvider {
+	func resume(_ session: Session) {
+		task?.resume()
+		session.stater?.beresume(session)
+	}
+	func suspend(_ session: Session) {
+		task?.cancel()
+		session.stater?.besuspend(session)
+	}
+	func cancel(_ session: Session) {
+		task?.cancel()
+		session.stater?.becomplete(session)
+	}
 }
 
 public protocol CacheProvider: class {
-	func setCacheNetwork(_ url: String, _ parameter: [String: Any], _ response: Data?)
-	func cacheNetwork(_ url: String, _ parameter: [String: Any]) -> Data
-}
-
-public enum Result<Value> {
-	case success(_: Data, _: Value)
-	case failure(Error)
-	public var isSuccess: Bool {
-		switch self {
-		case .success:
-			return true
-		case .failure:
-			return false
-		}
-	}
-	public var value: Value? {
-		switch self {
-		case .success(let (_, value)):
-			return value
-		case .failure:
-			return nil
-		}
-	}
-	public var error: Error? {
-		switch self {
-		case .success:
-			return nil
-		case .failure(let error):
-			return error
-		}
-	}
-	public static func data(_ value: Any?) -> Data {
-		if let data = value as? Data {
-			return data
-		} else {
-			if let value = value, JSONSerialization.isValidJSONObject(value) {
-				let data = try? JSONSerialization.data(withJSONObject: value)
-				return data ?? Data()
-			}
-		}
-		return Data()
-	}
+	typealias CacheResult = ((_ data: Data) -> Void)
+	func setCacheNetwork(_ session: Session, _ response: Data?)
+	func cacheNetwork(_ session: Session, _ resultQueue: DispatchQueue, _ result: @escaping CacheResult)
 }
 
 public protocol ValidateProvider: class {
-	func result(_ response: Any?) -> Result<Any>
+	func result(_ session: Session, _ response: Result?) -> Result
 }
 
-open class Network {
+public protocol StateProvider: class {
+	func beresume(_ session: Session)
+	func besuspend(_ session: Session)
+	func becomplete(_ session: Session)
+}
+
+public protocol MonitorProvider: class {
+	func monitor(_ session: Session, _ request: URLRequest, _ response: URLResponse?)
+}
+
+
+public protocol Session: class {
+	var connector: TaskProvider? { get set }
+	var validator: ValidateProvider? { get set }
+	var cacher: CacheProvider? { get set }
+	var stater: StateProvider? { get set }
+	var monitor: MonitorProvider? { get set }
+}
+
+public extension Session {
 	
-	open let method: ConnectMethod
-	open let url: String
-	open let readResponse: ResponseHandler
-	open let parameters: [String: Any]
-	
-	open var parametersEncoding: Any?
-	
-	open var headers: [String: String]?
-	
-	open var progress: OutputProgressHandler?
-	
-	open var dataResponse: ResponseHandler?
-	open var destination: URL?
-	
-	open var uploadData: Data?
-	open var uploadFormArray: [URL]?
-	
-	public init(url: String, method: ConnectMethod = .get, parameter: [String: Any] = [:], validateProvider: ValidateProvider, complete: @escaping ResponseHandler = {response in}) {
-		self.url = url
-		self.method = method
-		self.parameters = parameter
-		self.readResponse = complete
-		self.validateProvider = validateProvider
-	}
-	
-	open weak var task: Task?
-	open var validateProvider: ValidateProvider
-	open var connectProvider: ConnectProvider.Type?
-	open var cacheProvider: CacheProvider?
-	
-	open func request() {
-		var task: Task?
-		switch method {
-		case .upload:
-			task = connectProvider?.upload(self)
-		case .download:
-			task = connectProvider?.download(self)
-		default:
-			task = connectProvider?.request(self)
+	func request(_ request: URLRequest, _ progress: ProgressHandler? = nil, _ responseQueue: DispatchQueue = DispatchQueue.global(), _ response: @escaping ResponseHandler) {
+		
+		let reresponse: ResponseHandler = { result in
+			
+			DispatchQueue.global().async {
+				
+				var reresult = self.validator?.result(self, result) ?? Result.unknow
+				
+				let completeHandler: ((_: Result) -> Void) = { reresult in
+					
+					responseQueue.async {
+						response(reresult)
+					}
+					
+					self.stater?.becomplete(self)
+					
+				}
+				
+				switch reresult {
+				case .success(let data):
+					if data.count > 0 {
+						self.cacher?.setCacheNetwork(self, data)
+					}
+					completeHandler(reresult)
+				case .failure(_):
+					self.cacher?.cacheNetwork(self, DispatchQueue.global(), { (data) in
+						if data.count > 0 {
+							reresult = Result.success(data)
+						}
+						completeHandler(reresult)
+					})
+				}
+				
+			}
+			
 		}
-		self.task = task
-	}
-	
-	open func cacheResult(_ inResult: Result<Any>) -> Result<Any> {
-		var read: Any?
-		switch inResult {
-		case .failure:
-			read = cacheProvider?.cacheNetwork(url, parameters)
-		case .success(let (data, value)):
-			read = value
-			cacheProvider?.setCacheNetwork(url, parameters, data)
-		}
-		let outResult = validateProvider.result(read)
-		return outResult
+		
+		connector?.createTask(request, progress, reresponse)
+		
+		connector?.resume(self)
 	}
 	
 }
+

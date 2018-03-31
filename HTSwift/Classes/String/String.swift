@@ -9,12 +9,12 @@ import Foundation
 
 public extension String {
 	
-	var origin: NSString {
+	var ns: NSString {
 		return self as NSString
 	}
 	
 	func height(_ font: UIFont, _ width: CGFloat) -> CGFloat {
-		let string = self.origin
+		let string = self.ns
 		let height = string.boundingRect(with: CGSize(width: width, height: 0), options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedStringKey.font: font], context: nil).size.height
 		return height
 	}

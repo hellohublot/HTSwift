@@ -8,19 +8,14 @@ public enum PlaceholderState: Int {
 	case nothingDisplay
 	case errorNetwork = -1000
 	case needAuth
+	case reserved
 }
 
 public protocol PlaceholderProvider: class {
 	
-	typealias ReloadNetworkHandler = () -> Void
-	
-	var reloadNetworkHandler: ReloadNetworkHandler? {
-		get set
-	}
-	
 	func setPlaceholderView(_ placeholderView: (UIView & PlaceholderAble), forState state: PlaceholderState)
 	
-	func placeholderViewFromState(_ state: PlaceholderState) -> (UIView & PlaceholderAble)?
+	func placeholderViewFromState(_ state: PlaceholderState, _ superView: UIView) -> (UIView & PlaceholderAble)?
 	
 }
 
@@ -42,13 +37,13 @@ extension UIView {
 			view?.removeFromSuperview()
 			view?.placeholderHidden()
 		}
-		let placeholderView = placeholderProvider?.placeholderViewFromState(state)
-		if state != .none, let _ = placeholderView {
+		let placeholderView = placeholderProvider?.placeholderViewFromState(state, self)
+		if state != .none, let placeholderView = placeholderView {
 			bringSubview(toFront: placeholderContentView)
-			placeholderContentView.addSubview(placeholderView!)
+			placeholderContentView.addSubview(placeholderView)
 			placeholderContentView.isHidden = false
-			placeholderView?.moveToContentView()
-			placeholderView?.placeholderShow()
+			placeholderView.moveToContentView()
+			placeholderView.placeholderShow()
 		} else {
 			placeholderContentView.isHidden = true
 		}

@@ -3,15 +3,15 @@
 import Foundation
 
 struct AssociatedManager {
-	static var AssociatedKeyValue:[String:Any] = [:]
+	static var AssociatedKeyValue = [String:Any]()
 	static func point(forKey key: String) -> UnsafeRawPointer {
-		let value = AssociatedKeyValue[key] ?? {
+		let value = (AssociatedKeyValue[key] as? UnsafeRawPointer) ?? {
 			var temp: UnsafeRawPointer
 			temp = UnsafeRawPointer.init(key)
 			AssociatedKeyValue[key] = temp
 			return temp
 		}()
-		return value as! UnsafeRawPointer
+		return value
 	}
 }
 

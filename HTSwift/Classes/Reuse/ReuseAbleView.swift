@@ -47,7 +47,10 @@ public protocol ReuseAbleView {
 	func setProxy(proxy: ThroughType?)
 }
 
+private var reuseThroughSectionKey: Int = 0
+
 public extension ReuseAbleView {
+	
 	var proxy: ThroughType? {
 		get {
 			return nil
@@ -57,11 +60,31 @@ public extension ReuseAbleView {
 			let proxy = newValue as? ReuseThrough
 			let sectionCount = proxy?.reuseViewNumberOfSections(in: self) ?? 0
 			for section in 0...sectionCount {
-				let cellClsss = proxy?.cellClass(self, for: IndexPath(row: 0, section: section))
-				proxy?.registerCell(self, cellClass: cellClsss!, forIdentifier: cellClsss!.identifier)
+				if let cellClsss = proxy?.cellClass(self, for: IndexPath(row: 0, section: section)) {
+					proxy?.registerCell(self, cellClass: cellClsss, forIdentifier: cellClsss.identifier)
+				}
 			}
 		}
 	}
+	
+	public var cellModelArray: [Any] {
+		get {
+			return sectionModelArray.last?.modelArray ?? []
+		}
+		set {
+			sectionModelArray = [ReuseSectionModel(newValue)]
+		}
+	}
+	
+	public var sectionModelArray: [ReuseSectionArray] {
+		get {
+			return objc_getAssociatedObject(self, &reuseThroughSectionKey) as? [ReuseSectionArray] ?? []
+		}
+		set {
+			objc_setAssociatedObject(self, &reuseThroughSectionKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+		}
+	}
+	
 }
 
 extension UITableView: ReuseAbleView {
@@ -103,43 +126,21 @@ public protocol ReuseThrough: class {
 	func reuseView<T: ReuseAbleView>(_ reuseView: T, cellForRowAt indexPath: IndexPath) -> ReuseCell
 }
 
-private var reuseThroughCellKey: Int = 0
-private var reuseThroughSectionKey: Int = 0
-
 public extension ReuseThrough {
 	
-	public var cellModelArray: [Any] {
-		get {
-			return objc_getAssociatedObject(self, &reuseThroughCellKey) as? [Any] ?? []
-		}
-		set {
-			objc_setAssociatedObject(self, &reuseThroughCellKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-			sectionModelArray = [ReuseSectionModel(newValue)]
-		}
-	}
-	
-	public var sectionModelArray: [ReuseSectionArray] {
-		get {
-			return objc_getAssociatedObject(self, &reuseThroughSectionKey) as? [ReuseSectionArray] ?? []
-		}
-		set {
-			objc_setAssociatedObject(self, &reuseThroughSectionKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-		}
-	}
-	
 	public func reuseViewNumberOfSections<T: ReuseAbleView>(in reuseView: T) -> Int {
-		return sectionModelArray.count
+		return reuseView.sectionModelArray.count
 	}
 	
 	public func reuseView<T: ReuseAbleView>(_ reuseView: T, numberOfRowsInSection section: Int) -> Int {
-		let sectionModel = sectionModelArray[section]
+		let sectionModel = reuseView.sectionModelArray[section]
 		return sectionModel.modelArray.count
 	}
 	
 	public func reuseView<T: ReuseAbleView>(_ reuseView: T, cellForRowAt indexPath: IndexPath) -> ReuseCell {
 		let identifier = cellClass(reuseView, for: indexPath).identifier
 		let cell = dequeueReusableCell(reuseView, withIdentifier: identifier, for: indexPath)
-		let sectionModel = sectionModelArray[indexPath.section]
+		let sectionModel = reuseView.sectionModelArray[indexPath.section]
 		let model = sectionModel.modelArray[indexPath.row]
 		cell.setModel(model, for: indexPath)
 		return cell
