@@ -45,30 +45,30 @@
 		299C99EDAD75F7A7589426EEEE83D753 /* HTSwift-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "HTSwift-dummy.m"; sourceTree = "<group>"; };
 		48120542D5A898E62CB9CBEF6E1CC101 /* Placeholder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Placeholder.swift; sourceTree = "<group>"; };
 		5A6584A1787F62E8A3E1057BF0F6DFE6 /* HTSwift.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = HTSwift.xcconfig; sourceTree = "<group>"; };
-		5B8E21F402F5828126D3EB652E8240B8 /* Pods_HTSwift_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_HTSwift_Example.framework; path = "Pods-HTSwift_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B8E21F402F5828126D3EB652E8240B8 /* Pods_HTSwift_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HTSwift_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F9EB5F28AE07661F4A0AB60C18419BF /* Pods-HTSwift_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-HTSwift_Example-umbrella.h"; sourceTree = "<group>"; };
-		65C24B8E6ED39EF77F8F77B1D6135EEE /* HTSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = HTSwift.framework; path = HTSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		65C24B8E6ED39EF77F8F77B1D6135EEE /* HTSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HTSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		67D52CFE2AE9AEC5C8C58C2183BE8D80 /* Timer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		6C0E8AC1812338FB43418F07CAD37B28 /* HTSwift.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = HTSwift.modulemap; sourceTree = "<group>"; };
 		8427FEB0D7BD28484A22958DFC8F8270 /* Network.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
-		866F495D1A9CC7C25C6666DF125451EC /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		866F495D1A9CC7C25C6666DF125451EC /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		8AD3FABC470F9C73853336034C064FF2 /* Pods-HTSwift_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-HTSwift_Example.modulemap"; sourceTree = "<group>"; };
 		8E7E7D94CF94F8F87F1223B1526F82F5 /* Image.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		99A4FE3A513F22C655B95AE88BA71E51 /* Color.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		A3B6D8247FA8CBEA82BEAA16F041693C /* HTSwift-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "HTSwift-umbrella.h"; sourceTree = "<group>"; };
 		AAC0F16B5A2D264276009BF5F2A4E86C /* String.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		B1534082E7D58F3E582DA5B562CA6C8E /* Pods-HTSwift_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-HTSwift_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		BCADE53BFCB584D87DBB2A97F9103D08 /* Pods-HTSwift_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-HTSwift_Example.release.xcconfig"; sourceTree = "<group>"; };
-		BE282DD66A8363A19FC50B9E04F8EFC0 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		BE282DD66A8363A19FC50B9E04F8EFC0 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C22CF937A8DED5F74C4126D1BF13DB6F /* Pods-HTSwift_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-HTSwift_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		C9F2CB5856403513AEC4F4162AED97E3 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D71130207982040D480F67A4A09D2FC4 /* Pods-HTSwift_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-HTSwift_Example-resources.sh"; sourceTree = "<group>"; };
 		E188DD1799B271800E70E68250E8571C /* HTSwift-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "HTSwift-prefix.pch"; sourceTree = "<group>"; };
 		E5E604829BB8FD874E58BBC44D9241DA /* Pods-HTSwift_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-HTSwift_Example-dummy.m"; sourceTree = "<group>"; };
 		E63FEA7C9F2C73A546A6CB432D442F42 /* Observer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
-		E765DE53A299328325528FBA918A587F /* HTSwift.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; path = HTSwift.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		E765DE53A299328325528FBA918A587F /* HTSwift.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; path = HTSwift.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		E86EAC0D888CCAA74829E4A4B58D8E02 /* Pods-HTSwift_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-HTSwift_Example-frameworks.sh"; sourceTree = "<group>"; };
 		FF3E9960C2630D1369AE04A42CEF833E /* Pods-HTSwift_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-HTSwift_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -171,13 +171,13 @@
 				1EA638FBF891840FC1F1B95F7CDC823C /* Image */,
 				EFD7EC08645A4A7C636BCC4F866D1809 /* Network */,
 				C95F6A242BBCE5CEFC626F5FEF852A42 /* Placeholder */,
-				0EB16F6C854EAEA9FD5575A0B739558D /* Pod */,
 				A3CB4EC56823D42D754443B73D3469A9 /* Refresh */,
 				DEA75B179AA424EDFD0F7DDA6DEF510E /* Release */,
 				4EAF5CB72CA0DCDAD3B5C9C08A5DE84D /* Reuse */,
 				EAE6AA943CA4B5EC2B191376FB973119 /* String */,
-				9C0BA8E73CBBCBAE644F04F9AFD2E63C /* Support Files */,
 				128BE9E291733D76488A21BF42A75044 /* View */,
+				0EB16F6C854EAEA9FD5575A0B739558D /* Pod */,
+				9C0BA8E73CBBCBAE644F04F9AFD2E63C /* Support Files */,
 			);
 			name = HTSwift;
 			path = ../..;

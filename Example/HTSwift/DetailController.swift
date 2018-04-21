@@ -14,7 +14,6 @@ class DetailController: UIViewController {
 	lazy var tableView: UITableView = {
 		var tableView = UITableView(frame: view.bounds)
 		tableView.register(HTCell.self, forCellReuseIdentifier: "1")
-		tableView.proxy = self
 		return tableView
 	}()
 	
@@ -25,7 +24,7 @@ class DetailController: UIViewController {
 	}
 	
 	func initDataSource () {
-		tableView.cellModelArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17"]
+		tableView.setCellModelArray(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17"], proxy: self)
 		tableView.reloadData()
 	}
 	

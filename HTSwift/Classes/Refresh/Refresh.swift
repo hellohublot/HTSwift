@@ -26,8 +26,13 @@ public protocol RefreshProvider: class {
 	var headerControl: RefreshControl? {
 		get
 	}
+	
 	var footerControl: RefreshFooterControl? {
 		get
+	}
+	
+	weak var superView: UIScrollView? {
+		get set
 	}
 	
 }
@@ -64,20 +69,32 @@ extension UIScrollView {
 	}
 	
 	public func setRefreshingBlock(_ provider: RefreshProvider?, _ refreshingBlock: @escaping RefreshingHandler) {
+		
+		
 		refreshProvider = provider
+		provider?.superView = self
+		
+		
 		let headerRefreshing: ControlHandler = {[weak self] in
 			self?.pageIndex = 0
-			refreshingBlock(self?.pageIndex ?? 0 + 1, self?.pageCount ?? 10)
+			refreshingBlock((self?.pageIndex ?? 0) + 1, self?.pageCount ?? 10)
 		}
 		refreshProvider?.headerControl?.block = headerRefreshing
+		
+		
 		let footerRefreshing: ControlHandler = {[weak self] in
 			self?.pageIndex = max(1, self?.pageIndex ?? 0)
-			refreshingBlock(self?.pageIndex ?? 0 + 1, self?.pageCount ?? 10)
+			refreshingBlock((self?.pageIndex ?? 0) + 1, self?.pageCount ?? 10)
 		}
 		refreshProvider?.footerControl?.block = footerRefreshing
+		
+		
+		resetFooterWith(noMoreData: true)
+		
+		
 	}
 	
-	public func respondHeaderRefresh() {
+	@objc public func respondHeaderRefresh() {
 		if let headerRefreshing = refreshProvider?.headerControl?.block {
 			placeholderState = .firstRefresh
 			headerRefreshing()
@@ -88,30 +105,32 @@ extension UIScrollView {
 		endRefreshWith(modelCount: modelCount, onlyOnePage: false)
 	}
 	
-	public func endRefreshWith(modelCount: NSInteger, onlyOnePage: Bool) {
+	public func endRefreshWithOnlyOnePage(modelCount: NSInteger) {
+		endRefreshWith(modelCount: modelCount, onlyOnePage: true)
+	}
+	
+	private func endRefreshWith(modelCount: NSInteger, onlyOnePage: Bool) {
 		let isHeaderRefreshing = (refreshProvider?.headerControl?.refresh ?? true) || placeholderState == .firstRefresh
 		let isFooterRefreshing = (refreshProvider?.footerControl?.refresh ?? false)
 		var willNoMoreData = false
 		var willState = placeholderState
 		if modelCount < 0 {
+			willNoMoreData = true
 			if isHeaderRefreshing {
 				willState = PlaceholderState(rawValue: modelCount) ?? .errorNetwork
-				willNoMoreData = true
 			}
 		} else if (modelCount == 0) {
+			willNoMoreData = true
 			if isHeaderRefreshing {
 				willState = .nothingDisplay
-				willNoMoreData = true
-			} else if isFooterRefreshing {
-				willNoMoreData = true
 			}
 		} else {
+			willState = .none
 			if isHeaderRefreshing {
 				pageIndex = 1
 			} else if isFooterRefreshing {
 				pageIndex += 1
 			}
-			willState = .none
 			if modelCount != pageCount || onlyOnePage {
 				willNoMoreData = true
 			}

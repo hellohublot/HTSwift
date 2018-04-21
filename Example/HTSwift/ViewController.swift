@@ -19,7 +19,6 @@ class ViewController: UIViewController {
 		layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 		var collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
 		collectionView.backgroundColor = .white
-		collectionView.proxy = self
 		collectionView.register(HTHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: HTHeader.identifier)
 		collectionView.register(HTHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: HTHeader.identifier)
 		return collectionView
@@ -32,7 +31,7 @@ class ViewController: UIViewController {
 	}
 	
 	func initDataSource () {
-		collectionView.sectionModelArray = [ReuseSectionModel(["1", "2", "3", "4"]), ReuseSectionModel(["1", "2", "3", "4"]), ReuseSectionModel(["1", "2", "3", "4"])]
+		collectionView.setSectionModelArray([ReuseSectionModel(["1", "2", "3", "4"]), ReuseSectionModel(["1", "2", "3", "4"]), ReuseSectionModel(["1", "2", "3", "4"])], proxy: self)
 		collectionView.reloadData()
 	}
 	
@@ -71,7 +70,7 @@ extension ViewController: CollectionViewThrough, UICollectionViewDelegateFlowLay
 	func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
 		let identifier = HTHeader.identifier
 		let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: identifier, for: indexPath)
-		let sectionModel = collectionView.sectionModelArray[indexPath.section]
+		let sectionModel = collectionView.sectionModelArray()[indexPath.section]
 		(cell as! ReuseCell).setModel(sectionModel, for: indexPath)
 		return cell
 	}

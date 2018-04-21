@@ -13,9 +13,13 @@ public enum PlaceholderState: Int {
 
 public protocol PlaceholderProvider: class {
 	
+	weak var superView: UIView? {
+		get set
+	}
+		
 	func setPlaceholderView(_ placeholderView: (UIView & PlaceholderAble), forState state: PlaceholderState)
 	
-	func placeholderViewFromState(_ state: PlaceholderState, _ superView: UIView) -> (UIView & PlaceholderAble)?
+	func placeholderViewFromState(_ state: PlaceholderState) -> (UIView & PlaceholderAble)?
 	
 }
 
@@ -32,12 +36,26 @@ extension UIView {
 	}
 	
 	public func reloadPlaceholderState(_ state: PlaceholderState) {
+		switch state {
+		case .nothingDisplay, .errorNetwork, .needAuth:
+			if let tableView = self as? UITableView {
+				tableView.setSectionModelArray([], proxy: nil)
+				tableView.reloadData()
+			} else if let collectionView = self as? UICollectionView {
+				collectionView.setSectionModelArray([], proxy: nil)
+				collectionView.reloadData()
+			}
+			break
+		default:
+			break
+		}
+		placeholderProvider?.superView = self
 		while placeholderContentView.subviews.count > 0 {
 			let view = placeholderContentView.subviews.last as? (UIView & PlaceholderAble)
 			view?.removeFromSuperview()
 			view?.placeholderHidden()
 		}
-		let placeholderView = placeholderProvider?.placeholderViewFromState(state, self)
+		let placeholderView = placeholderProvider?.placeholderViewFromState(state)
 		if state != .none, let placeholderView = placeholderView {
 			bringSubview(toFront: placeholderContentView)
 			placeholderContentView.addSubview(placeholderView)
@@ -49,11 +67,16 @@ extension UIView {
 		}
 	}
 	
-	public weak var placeholderProvider: PlaceholderProvider? {
+	public var placeholderProvider: PlaceholderProvider? {
 		get {
 			return associatedValueFor(key: #function) as? PlaceholderProvider
 		}
 		set {
+			if let tableView = self as? UITableView {
+				if tableView.tableFooterView == nil {
+					tableView.tableFooterView = UIView()
+				}
+			}
 			setAssociatedValue(value: newValue, forKey: #function)
 		}
 	}

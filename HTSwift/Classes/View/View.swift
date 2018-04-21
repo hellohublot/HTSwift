@@ -21,9 +21,9 @@ public extension UIView {
 
 extension UIView: UIGestureRecognizerDelegate {
 
-	public typealias TouchInsideBlock = ((_:UIView) -> (Void))
+	public typealias TouchInsideBlock = ((_: UIView, _: UITapGestureRecognizer) -> Void)
 	
-	public typealias TouchReceiveBlock = ((_:UIView, _: UIView) -> (Bool))
+	public typealias TouchReceiveBlock = ((_: UIView, _: UITapGestureRecognizer, _: UITouch, _: UIView) -> Bool)
 	
 	public var distanceTouchInside: TimeInterval {
 		get {
@@ -46,7 +46,7 @@ extension UIView: UIGestureRecognizerDelegate {
 		}
 	}
 	
-	public var whenTouchInside: TouchInsideBlock? {
+	private var touchInside: TouchInsideBlock? {
 		get {
 			return associatedValueFor(key: #function) as? TouchInsideBlock
 		}
@@ -56,7 +56,7 @@ extension UIView: UIGestureRecognizerDelegate {
 		}
 	}
 	
-	public var whenTouchReceive: TouchReceiveBlock? {
+	private var touchReceive: TouchReceiveBlock? {
 		get {
 			return associatedValueFor(key: #function) as? TouchReceiveBlock
 		}
@@ -67,23 +67,23 @@ extension UIView: UIGestureRecognizerDelegate {
 	
 	@objc private func touchInsideReponse(_ gesture: UITapGestureRecognizer) {
 		self.isUserInteractionEnabled = false
-		whenTouchInside?(self)
+		touchInside?(self, gesture)
 		DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + self.distanceTouchInside) {
 			self.isUserInteractionEnabled = true
 		}
 	}
 	
 	public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-		if let whenTouchReceive = whenTouchReceive, let view = touch.view {
-			return whenTouchReceive(self, view)
+		if let whenTouchReceive = touchReceive, let view = touch.view {
+			return whenTouchReceive(self, whenTouchGesture, touch, view)
 		}
 		return true
 	}
 	
-	public func whenTouchInside(_ whenTouchInside: @escaping TouchInsideBlock, _ whenTouchReceive: TouchReceiveBlock? = nil) {
-		self.isUserInteractionEnabled = true
-		self.whenTouchInside = whenTouchInside
-		self.whenTouchReceive = whenTouchReceive
+	public func whenTouch(inside: @escaping TouchInsideBlock, receive: TouchReceiveBlock? = nil) {
+		isUserInteractionEnabled = true
+		touchInside = inside
+		touchReceive = receive
 	}
 	
 }
