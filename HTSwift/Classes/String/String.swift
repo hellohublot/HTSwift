@@ -13,7 +13,7 @@ public extension String {
 		let attributedString = NSAttributedString.init(string: self, attributes: [
 			NSAttributedStringKey.font: font
 		])
-		return attributedString.size(font, size)
+		return attributedString.size(size)
 	}
 	
 	func height(_ font: UIFont, _ width: CGFloat) -> CGFloat {
@@ -26,9 +26,12 @@ public extension String {
 
 }
 
-extension NSAttributedString {
+public extension NSAttributedString {
 	
-	func size(_ font: UIFont, _ size: CGSize) -> CGSize {
+	func size(_ size: CGSize) -> CGSize {
+        guard length > 0 else {
+            return CGSize.zero
+        }
 		return self.boundingRect(with: size, options: [
 			.usesLineFragmentOrigin,
 			.usesFontLeading

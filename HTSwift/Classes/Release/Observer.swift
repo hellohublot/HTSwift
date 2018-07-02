@@ -26,9 +26,7 @@ class _Observer<T: NSObject>: NSObject {
 	}
 	
 	deinit {
-		if let beObserver = beObserver {
-			beObserver.removeObserver(self, forKeyPath: NSStringFromSelector(observerKey), context: nil)
-		}
+        beObserver?.removeObserver(self, forKeyPath: NSStringFromSelector(observerKey), context: nil)
 	}
 	
 	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -59,7 +57,7 @@ open class Observer {
 		for observer in observerList(beObserver) {
 			if observer.observerKey != observerKey {
 				newObserverList.append(observer)
-			}
+            }
 		}
 		setObserverList(beObserver, newObserverList)
 	}

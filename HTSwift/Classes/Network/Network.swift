@@ -8,11 +8,23 @@ public typealias ResponseHandler = (_ data: Data?, _ error: Error?) -> Void
 
 public typealias ResultHandler = (_ result: Result) -> Void
 
+public enum HTResultError: Error {
+	case unknown
+	var localizedDescription: String {
+		return "未知错误"
+	}
+}
 
-public enum Result {
-	case success(_: Data, _: Any)
-	case failure(_: Error?)
-	public static let unknow = Result.failure(nil)
+open class Result {
+	open var data: Data?
+	open var value: Any?
+	open var error: Error = HTResultError.unknown
+	public init(_ data: Data?, _ value: Any?, _ error: Error? = HTResultError.unknown) {
+		self.data = data
+		self.value = value
+		let reerror = error ?? HTResultError.unknown
+		self.error = reerror
+	}
 }
 
 public protocol TaskProvider: class {
@@ -65,33 +77,30 @@ public extension Session {
 		
 		let reresponse: ResponseHandler = { (data, error) in
 			
-			let suredata = data ?? Data()
-			
-			var reresult = self.parser?.parse(self, data, error) ?? Result.success(suredata, suredata)
+			var reresult = self.parser?.parse(self, data, error) ?? Result.init(data, data)
 			
 			let completeHandler: ResultHandler = { reresult in
 				
 				responseQueue.async {
+					
+					self.stater?.becomplete(self, reresult)
+					
 					response(reresult)
+					
 				}
-				
-				self.stater?.becomplete(self, reresult)
 				
 			}
 			
-			switch reresult {
-			case .success(let (data, _)):
-				if data.count > 0 {
-					self.cacher?.setCacheNetwork(self, data)
-				}
+			if error == nil {
+				self.cacher?.setCacheNetwork(self, data)
 				completeHandler(reresult)
-			case .failure(_):
-				self.cacher?.cacheNetwork(self, DispatchQueue.global(), { (data) in
-					if data.count > 0 {
-						reresult = self.parser?.parse(self, data, nil) ?? Result.failure(error)
-					}
+			} else if let cacher = self.cacher {
+				cacher.cacheNetwork(self, DispatchQueue.global(), { (data) in
+					reresult = self.parser?.parse(self, data, nil) ?? Result.init(data, data)
 					completeHandler(reresult)
 				})
+			} else {
+				completeHandler(reresult)
 			}
 			
 		}
@@ -99,9 +108,6 @@ public extension Session {
 		connector?.createTask(request, progress, reresponse)
 		
 		connector?.resume(self)
-		
-//		print("😆" + (connector?.task?.originalRequest?.url?.absoluteString ?? ""))
-//		print("🤗" + (request.url?.absoluteString ?? ""))
 		
 	}
 	

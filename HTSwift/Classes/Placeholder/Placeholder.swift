@@ -72,9 +72,15 @@ extension UIView {
 			return associatedValueFor(key: #function) as? PlaceholderProvider
 		}
 		set {
-			if let tableView = self as? UITableView {
-				if tableView.tableFooterView == nil {
-					tableView.tableFooterView = UIView()
+			if let scrollView = self as? UIScrollView {
+				scrollView.keyboardDismissMode = .onDrag
+				if let tableView = scrollView as? UITableView {
+					if tableView.tableFooterView == nil {
+						tableView.tableFooterView = UIView()
+					}
+					tableView.estimatedRowHeight = 0
+					tableView.estimatedSectionHeaderHeight = 0
+					tableView.estimatedSectionFooterHeight = 0
 				}
 			}
 			setAssociatedValue(value: newValue, forKey: #function)

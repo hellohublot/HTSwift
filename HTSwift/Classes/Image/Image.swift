@@ -9,14 +9,24 @@ import Foundation
 
 public extension UIImage {
 	
-	convenience init(_ color: UIColor) {
+	static func from(_ color: UIColor) -> UIImage {
 		let size = CGSize(width: 1, height: 1)
 		UIGraphicsBeginImageContextWithOptions(size, false, 0)
 		color.set()
 		UIRectFill(CGRect(origin: CGPoint.zero, size: size))
-		let image = UIGraphicsGetImageFromCurrentImageContext()?.cgImage ?? UIImage().cgImage!
+		let image = UIGraphicsGetImageFromCurrentImageContext() ?? UIImage()
 		UIGraphicsEndImageContext()
-		self.init(cgImage: image)
+		return image
+	}
+	
+	static func from(_ view: UIView) -> UIImage {
+		UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, 0)
+		if let context = UIGraphicsGetCurrentContext() {
+			view.layer.render(in: context)
+		}
+		let image = UIGraphicsGetImageFromCurrentImageContext() ?? UIImage()
+		UIGraphicsEndImageContext()
+		return image
 	}
 	
 }
@@ -45,7 +55,7 @@ public extension UIImage {
 	func imageInsert(_ color: UIColor, _ edge: UIEdgeInsets) -> UIImage {
 		let width = size.width + edge.left + edge.right
 		let height = size.height + edge.top + edge.bottom
-		var image = UIImage.init(color).imageWith(size: CGSize.init(width: width, height: height))
+		var image = UIImage.from(color).imageWith(size: CGSize.init(width: width, height: height))
 		image = image.imageAppend(self, at: CGPoint.init(x: edge.left, y: edge.top))
 		return image
 	}
